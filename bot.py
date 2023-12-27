@@ -12,14 +12,17 @@ class HelpCommand(commands.HelpCommand):
         return "{0.clean_prefix}{1.qualified_name} {1.signature}".format(self, command)
 
     async def send_bot_help(self, mapping):
-        # iterate over cogs and their associated commands
+        # Add your GitHub repo link here
+        github_repo_link = "https://github.com/yourusername/your-repo"
+
+        # Iterate over cogs and their associated commands
         for cog, commands in mapping.items():
             if cog:
                 cog_name = cog.qualified_name
             else:
                 cog_name = "Commands"
 
-            # filter and sort commands
+            # Filter and sort commands
             filtered = await self.filter_commands(commands, sort=True)
             command_signatures = [self.get_command_signature(c) for c in filtered]
             command_descriptions = [c.description for c in filtered]
@@ -29,9 +32,14 @@ class HelpCommand(commands.HelpCommand):
                     f"**{sig}**\n{desc}"
                     for sig, desc in zip(command_signatures, command_descriptions)
                 )
+
+                # Include the GitHub repo link and a description in the help message
                 embed = discord.Embed(
-                    title=cog_name, description=cog_commands, color=discord.Color.blue()
+                    title=cog_name,
+                    description=f"{cog_commands}\n\n[GitHub Repo]({github_repo_link})",
+                    color=discord.Color.blue(),
                 )
+
                 await self.get_destination().send(embed=embed)
 
 
