@@ -12,12 +12,14 @@ class HelpCommand(commands.HelpCommand):
         return "{0.clean_prefix}{1.qualified_name} {1.signature}".format(self, command)
 
     async def send_bot_help(self, mapping):
+        # iterate over cogs and their associated commands
         for cog, commands in mapping.items():
             if cog:
                 cog_name = cog.qualified_name
             else:
                 cog_name = "Commands"
 
+            # filter and sort commands
             filtered = await self.filter_commands(commands, sort=True)
             command_signatures = [self.get_command_signature(c) for c in filtered]
             command_descriptions = [c.description for c in filtered]
