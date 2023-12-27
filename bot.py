@@ -12,8 +12,7 @@ class HelpCommand(commands.HelpCommand):
         return "{0.clean_prefix}{1.qualified_name} {1.signature}".format(self, command)
 
     async def send_bot_help(self, mapping):
-        # Add your GitHub repo link here
-        github_repo_link = "https://github.com/yourusername/your-repo"
+        github_repo_link = "https://github.com/ronan-s1/secret-santa-discord-bot"
 
         # Iterate over cogs and their associated commands
         for cog, commands in mapping.items():
