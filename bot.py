@@ -23,14 +23,12 @@ class HelpCommand(commands.HelpCommand):
             command_descriptions = [c.description for c in filtered]
 
             if command_signatures:
-                cog_commands = "\n".join(
+                cog_commands = "\n\n".join(
                     f"**{sig}**\n{desc}"
                     for sig, desc in zip(command_signatures, command_descriptions)
                 )
                 embed = discord.Embed(
-                    title=cog_name, 
-                    description=cog_commands, 
-                    color=discord.Color.blue()
+                    title=cog_name, description=cog_commands, color=discord.Color.blue()
                 )
                 await self.get_destination().send(embed=embed)
 
@@ -49,7 +47,7 @@ with open("santa_config.json", "r") as f:
     config = json.load(f)
 
 
-# == logic stuff ==
+# == command logic stuff ==
 
 
 # Check if the organiser called the secretsanta command
@@ -79,10 +77,13 @@ async def on_ready():
 
 @bot.command(
     name="secretsanta",
-    description="This command can only be used by the organiser. It sends a PM to everyone saying who's buying for who. This is randomly assigned."
+    description="This command can only be used by the organiser. It sends a PM to everyone saying who's buying for who. This is randomly assigned.",
 )
-@commands.check(is_organiser)
 async def secretsanta(ctx):
+    if not is_organiser(ctx):
+        await ctx.send("You do not have permission to use this command.")
+        return
+
     participants = config["participants"]
     santa_pairs = secret_santa(participants)
     for santa, recipient in santa_pairs:
@@ -100,6 +101,16 @@ async def secretsanta(ctx):
         await user.send(secret_santa_message)
 
     await ctx.send(f"Secret Santa messages sent!")
+
+
+@bot.command(name="rules", description="Lists the rules and budget.")
+async def rules(ctx):
+    budget = config["rules"]["budget"]
+    rules_list = config["rules"]["rules_list"]
+    rule_list_str = "\n".join([f"{i}. {rule}" for i, rule in enumerate(rules_list)])
+    rules_message = f"**Secret Santa Rules:\n**Budget: €{budget}\n\n{rule_list_str}"
+
+    await ctx.send(rules_message)
 
 
 bot.run(TOKEN)
