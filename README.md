@@ -49,7 +49,7 @@ This a simple bot for Secret Santa. The bot randomly assigns participants and pr
             "name": "Bill",
             "discord_user_id": "1009299847574673773",
             "address": "789 Elm Blvd, Village, Country"
-        },
+        }
     ]
 }
 ```
@@ -59,14 +59,13 @@ This a simple bot for Secret Santa. The bot randomly assigns participants and pr
 1. Clone the repo
 
 2. Install required libraries and packages
-
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 3. Create a `santa_config.json`. You can just edit the example one above.
    
 4. Create a `.env` file with your bot token
-```env
-TOKEN=<your bot token>
-```
+    ```env
+    TOKEN=<your bot token>
+    ```
